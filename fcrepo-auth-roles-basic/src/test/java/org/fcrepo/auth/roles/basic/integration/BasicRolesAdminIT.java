@@ -22,12 +22,13 @@ import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.junit.Assert.assertEquals;
 
-import org.apache.http.client.ClientProtocolException;
-import org.fcrepo.auth.roles.common.integration.RolesFadTestObjectBean;
-import org.junit.Test;
-
 import java.io.IOException;
 import java.util.List;
+
+import org.fcrepo.auth.roles.common.integration.RolesFadTestObjectBean;
+
+import org.apache.http.client.ClientProtocolException;
+import org.junit.Test;
 
 /**
  * Verifies that role for admins is properly enforced.
@@ -50,7 +51,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
             throws ClientProtocolException, IOException {
         assertEquals("Admin cannot read testparent1!", OK.getStatusCode(),
                 canRead(
-                        "exampleadmin", "testparent1", true));
+                        "exampleadmin", testParent1, true));
     }
 
     @Test
@@ -58,7 +59,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
             throws ClientProtocolException, IOException {
         assertEquals(
                 "Admin cannot write datastream to testparent1!", CREATED
-                .getStatusCode(), canAddDS("exampleadmin", "testparent1",
+                .getStatusCode(), canAddDS("exampleadmin", testParent1,
                         TESTDS, true));
     }
 
@@ -67,7 +68,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
             throws ClientProtocolException, IOException {
         assertEquals("Admin cannot add an ACL to testparent1!", CREATED
                 .getStatusCode(),
-                canAddACL("exampleadmin", "testparent1",
+                canAddACL("exampleadmin", testParent1,
                         "EVERYONE", "admin", true));
     }
 
@@ -79,7 +80,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
             throws ClientProtocolException, IOException {
         assertEquals("Admin cannot read testparent2!", OK.getStatusCode(),
                 canRead(
-                        "exampleadmin", "testparent2", true));
+                        "exampleadmin", testParent2, true));
     }
 
     /* open datastream */
@@ -89,7 +90,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot read datastream testparent2/tsp1_data!", OK
                 .getStatusCode(), canRead("exampleadmin",
-                        "testparent2/tsp1_data",
+                        testParent2 + "/" + tsp1Data,
                         true));
     }
 
@@ -101,8 +102,8 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
                 "Admin cannot update datastream testparent2/tsp1_data!",
                 NO_CONTENT
                 .getStatusCode(), canUpdateDS("exampleadmin",
-                        "testparent2",
-                        "tsp1_data", true));
+                        testParent2,
+                        tsp1Data, true));
     }
 
     @Test
@@ -112,7 +113,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
                 "Admin cannot add an ACL to datastream testparent2/tsp1_data!",
                 CREATED
                 .getStatusCode(), canAddACL("exampleadmin",
-                        "testparent2/tsp1_data", "EVERYONE", "admin", true));
+                        testParent2 + "/" + tsp1Data, "EVERYONE", "admin", true));
     }
 
     /* restricted datastream */
@@ -122,7 +123,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot read restricted datastream testparent2/tsp2_data!",
                 OK.getStatusCode(), canRead("exampleadmin",
-                        "testparent2/tsp2_data", true));
+                        testParent2 + "/" + tsp2Data, true));
     }
 
     @Test
@@ -131,8 +132,8 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot update restricted datastream testparent2/tsp2_data!",
                 NO_CONTENT.getStatusCode(), canUpdateDS("exampleadmin",
-                        "testparent2",
-                        "tsp2_data", true));
+                        testParent2,
+                        tsp2Data, true));
     }
 
     @Test
@@ -141,7 +142,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot add an ACL to restricted datastream testparent2/tsp2_data!",
                 CREATED.getStatusCode(), canAddACL("exampleadmin",
-                        "testparent2/tsp2_data", "EVERYONE", "admin", true));
+                        testParent2 + "/" + tsp2Data, "EVERYONE", "admin", true));
     }
 
     /* Child object (inherits ACL), one open datastream */
@@ -151,7 +152,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot read testparent1/testchild1NoACL!", OK
                 .getStatusCode(), canRead("exampleadmin",
-                        "testparent1/testchild1NoACL",
+                        testParent1 + "/" + testChild1NoACL,
                         true));
     }
 
@@ -162,7 +163,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
                 "Admin cannot write datastream to testparent1/testchild1NoACL!",
                 CREATED
                 .getStatusCode(), canAddDS("exampleadmin",
-                        "testparent1/testchild1NoACL", TESTDS, true));
+                        testParent1 + "/" + testChild1NoACL, TESTDS, true));
     }
 
     @Test
@@ -172,7 +173,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
                 "Admin cannot add an ACL to testparent1/testchild1NoACL!",
                 CREATED
                 .getStatusCode(), canAddACL("exampleadmin",
-                        "testparent1/testchild1NoACL", "EVERYONE", "admin",
+                        testParent1 + "/" + testChild1NoACL, "EVERYONE", "admin",
                         true));
     }
 
@@ -182,7 +183,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot read datastream testparent1/testchild1NoACL/tsc1_data!",
                 OK.getStatusCode(), canRead("exampleadmin",
-                        "testparent1/testchild1NoACL/tsc1_data", true));
+                        testParent1 + "/" + testChild1NoACL + "/" + tsc1Data, true));
     }
 
     @Test
@@ -191,7 +192,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot update datastream testparent1/testchild1NoACL/tsc1_data!",
                 NO_CONTENT.getStatusCode(), canUpdateDS("exampleadmin",
-                        "testparent1/testchild1NoACL", "tsc1_data", true));
+                        testParent1 + "/" + testChild1NoACL, tsc1Data, true));
     }
 
     @Test
@@ -201,7 +202,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot add an ACL to datastream testparent1/testchild1NoACL/tsc1_data!",
                 CREATED.getStatusCode(), canAddACL("exampleadmin",
-                        "testparent1/testchild1NoACL/tsc1_data", "EVERYONE",
+                        testParent1 + "/" + testChild1NoACL + "/" + tsc1Data, "EVERYONE",
                         "admin", true));
     }
 
@@ -212,7 +213,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot read testparent1/testchild2WithACL!", OK
                 .getStatusCode(), canRead("exampleadmin",
-                        "testparent1/testchild2WithACL", true));
+                        testParent1 + "/" + testChild2WithACL, true));
     }
 
     @Test
@@ -221,7 +222,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot write datastream to testparent1/testchild2WithACL!",
                 CREATED.getStatusCode(), canAddDS("exampleadmin",
-                        "testparent1/testchild2WithACL", TESTDS, true));
+                        testParent1 + "/" + testChild2WithACL, TESTDS, true));
     }
 
     @Test
@@ -230,7 +231,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot add an ACL to testparent1/testchild2WithACL!",
                 CREATED.getStatusCode(), canAddACL("exampleadmin",
-                        "testparent1/testchild2WithACL", "EVERYONE", "admin",
+                        testParent1 + "/" + testChild2WithACL, "EVERYONE", "admin",
                         true));
     }
 
@@ -240,7 +241,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot read datastream testparent1/testchild2WithACL/tsc1_data!",
                 OK.getStatusCode(), canRead("exampleadmin",
-                        "testparent1/testchild2WithACL/tsc1_data", true));
+                        testParent1 + "/" + testChild2WithACL + "/" + tsc1Data, true));
     }
 
     @Test
@@ -249,7 +250,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot update datastream testparent1/testchild2WithACL/tsc1_data!",
                 NO_CONTENT.getStatusCode(), canUpdateDS("exampleadmin",
-                        "testparent1/testchild2WithACL", "tsc1_data", true));
+                        testParent1 + "/" + testChild2WithACL, tsc1Data, true));
     }
 
     @Test
@@ -259,7 +260,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot add an ACL to datastream testparent1/testchild2WithACL/tsc1_data!",
                 CREATED.getStatusCode(), canAddACL("exampleadmin",
-                        "testparent1/testchild2WithACL/tsc1_data", "EVERYONE",
+                        testParent1 + "/" + testChild2WithACL + "/" + tsc1Data, "EVERYONE",
                         "admin", true));
     }
 
@@ -271,7 +272,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot read datastream testparent1/testchild2WithACL/tsc2_data!",
                 OK.getStatusCode(), canRead("exampleadmin",
-                        "testparent1/testchild2WithACL/tsc2_data", true));
+                        testParent1 + "/" + testChild2WithACL + "/" + tsc2Data, true));
     }
 
     @Test
@@ -282,7 +283,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot update datastream testparent1/testchild2WithACL/tsc2_data!",
                 NO_CONTENT.getStatusCode(), canUpdateDS("exampleadmin",
-                        "testparent1/testchild2WithACL", "tsc2_data", true));
+                        testParent1 + "/" + testChild2WithACL, tsc2Data, true));
     }
 
     @Test
@@ -293,7 +294,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot add an ACL to datastream testparent1/testchild2WithACL/tsc2_data!",
                 CREATED.getStatusCode(), canAddACL("exampleadmin",
-                        "testparent1/testchild2WithACL/tsc2_data", "EVERYONE",
+                        testParent1 + "/" + testChild2WithACL + "/" + tsc2Data, "EVERYONE",
                         "admin", true));
     }
 
@@ -303,7 +304,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
             throws ClientProtocolException, IOException {
         assertEquals("Admin cannot read testparent1/testchild4WithACL!", OK
                 .getStatusCode(), canRead("exampleadmin",
-                        "testparent1/testchild4WithACL", true));
+                        testParent1 + "/" + testChild4WithACL, true));
     }
 
     @Test
@@ -312,7 +313,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot write datastream to testparent1/testchild4WithACL!",
                 CREATED.getStatusCode(), canAddDS("exampleadmin",
-                        "testparent1/testchild4WithACL", TESTDS, true));
+                        testParent1 + "/" + testChild4WithACL, TESTDS, true));
     }
 
     @Test
@@ -321,7 +322,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot add an ACL to testparent1/testchild4WithACL!",
                 CREATED.getStatusCode(), canAddACL("exampleadmin",
-                        "testparent1/testchild4WithACL", "EVERYONE", "admin",
+                        testParent1 + "/" + testChild4WithACL, "EVERYONE", "admin",
                         true));
     }
 
@@ -333,7 +334,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot read datastream testparent1/testchild4WithACL/tsc1_data!",
                 OK.getStatusCode(), canRead("exampleadmin",
-                        "testparent1/testchild4WithACL/tsc1_data", true));
+                        testParent1 + "/" + testChild4WithACL + "/" + tsc1Data, true));
     }
 
     @Test
@@ -344,7 +345,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot update datastream testparent1/testchild4WithACL/tsc1_data!",
                 NO_CONTENT.getStatusCode(), canUpdateDS("exampleadmin",
-                        "testparent1/testchild4WithACL", "tsc1_data", true));
+                        testParent1 + "/" + testChild4WithACL, tsc1Data, true));
     }
 
     @Test
@@ -355,7 +356,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot add an ACL to datastream testparent1/testchild4WithACL/tsc1_data!",
                 CREATED.getStatusCode(), canAddACL("exampleadmin",
-                        "testparent1/testchild4WithACL/tsc1_data", "EVERYONE",
+                        testParent1 + "/" + testChild4WithACL + "/" + tsc1Data, "EVERYONE",
                         "admin", true));
     }
 
@@ -368,7 +369,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot read datastream testparent1/testchild4WithACL/tsc2_data!",
                 OK.getStatusCode(), canRead("exampleadmin",
-                        "testparent1/testchild4WithACL/tsc2_data", true));
+                        testParent1 + "/" + testChild4WithACL + "/" + tsc2Data, true));
     }
 
     @Test
@@ -379,7 +380,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot update datastream testparent1/testchild4WithACL/tsc2_data!",
                 NO_CONTENT.getStatusCode(), canUpdateDS("exampleadmin",
-                        "testparent1/testchild4WithACL", "tsc2_data", true));
+                        testParent1 + "/" + testChild4WithACL, tsc2Data, true));
     }
 
     @Test
@@ -390,7 +391,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Admin cannot add an ACL to datastream testparent1/testchild4WithACL/tsc2_data!",
                 CREATED.getStatusCode(), canAddACL("exampleadmin",
-                        "testparent1/testchild4WithACL/tsc2_data", "EVERYONE",
+                        testParent1 + "/" + testChild4WithACL + "/" + tsc2Data, "EVERYONE",
                         "admin", true));
     }
 
@@ -398,27 +399,27 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
     @Test
     public void testAdminCanReadAdminObj() throws ClientProtocolException,
     IOException {
-        assertEquals("Admin cannot read testparent2/testchild5WithACL!", OK
+        assertEquals("Admin cannot read testparent2/testChild5WithACL!", OK
                 .getStatusCode(), canRead("exampleadmin",
-                        "testparent2/testchild5WithACL", true));
+                        testParent2 + "/" + testChild5WithACL, true));
     }
 
     @Test
     public void testAdminCanWriteDatastreamOnAdminObj()
             throws ClientProtocolException, IOException {
         assertEquals(
-                "Admin cannot write datastream to testparent2/testchild5WithACL!",
+                "Admin cannot write datastream to testparent2/testChild5WithACL!",
                 CREATED.getStatusCode(), canAddDS("exampleadmin",
-                        "testparent2/testchild5WithACL", TESTDS, true));
+                        testParent2 + "/" + testChild5WithACL, TESTDS, true));
     }
 
     @Test
     public void testAdminCanAddACLToAdminObj()
             throws ClientProtocolException, IOException {
         assertEquals(
-                "Admin cannot add an ACL to testparent2/testchild5WithACL!",
+                "Admin cannot add an ACL to testparent2/testChild5WithACL!",
                 CREATED.getStatusCode(), canAddACL("exampleadmin",
-                        "testparent2/testchild5WithACL", "EVERYONE", "admin",
+                        testParent2 + "/" + testChild5WithACL, "EVERYONE", "admin",
                         true));
     }
 
@@ -426,27 +427,27 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
     public void testAdminCanReadAdminObjAdminRestrictedDatastream()
             throws ClientProtocolException, IOException {
         assertEquals(
-                "Admin cannot read datastream testparent2/testchild5WithACL/tsc1_data!",
+                "Admin cannot read datastream testparent2/testChild5WithACL/tsc1_data!",
                 OK.getStatusCode(), canRead("exampleadmin",
-                        "testparent2/testchild5WithACL/tsc1_data", true));
+                        testParent2 + "/" + testChild5WithACL + "/" + tsc1Data, true));
     }
 
     @Test
     public void testAdminCanUpdateAdminObjAdminRestrictedDatastream()
             throws ClientProtocolException, IOException {
         assertEquals(
-                "Admin cannot update datastream testparent2/testchild5WithACL/tsc1_data!",
+                "Admin cannot update datastream testparent2/testChild5WithACL/tsc1_data!",
                 NO_CONTENT.getStatusCode(), canUpdateDS("exampleadmin",
-                        "testparent2/testchild5WithACL", "tsc1_data", true));
+                        testParent2 + "/" + testChild5WithACL, tsc1Data, true));
     }
 
     @Test
     public void testAdminCanAddACLToAdminObjAdminRestrictedDatastream()
             throws ClientProtocolException, IOException {
         assertEquals(
-                "Admin cannot add an ACL to datastream testparent2/testchild5WithACL/tsc1_data!",
+                "Admin cannot add an ACL to datastream testparent2/testChild5WithACL/tsc1_data!",
                 CREATED.getStatusCode(), canAddACL("exampleadmin",
-                        "testparent2/testchild5WithACL/tsc1_data", "EVERYONE",
+                        testParent2 + "/" + testChild5WithACL + "/" + tsc1Data, "EVERYONE",
                         "admin", true));
     }
 
@@ -454,27 +455,27 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
     public void testAdminCanReadAdminObjPublicDatastream()
             throws ClientProtocolException, IOException {
         assertEquals(
-                "Admin cannot read datastream testparent2/testchild5WithACL/tsc2_data!",
+                "Admin cannot read datastream testparent2/testChild5WithACL/tsc2_data!",
                 OK.getStatusCode(), canRead("exampleadmin",
-                        "testparent2/tsp1_data", true));
+                        testParent2 + "/" + tsp1Data, true));
     }
 
     @Test
     public void testAdminCannotUpdateAdminObjPublicDatastream()
             throws ClientProtocolException, IOException {
         assertEquals(
-                "Admin should not be allowed to update datastream testparent2/testchild5WithACL/tsc2_data!",
+                "Admin should not be allowed to update datastream testparent2/testChild5WithACL/tsc2_data!",
                 FORBIDDEN.getStatusCode(), canUpdateDS("exampleadmin",
-                        "testparent2/testchild5WithACL", "tsc2_data", true));
+                        testParent2 + "/" + testChild5WithACL, tsc2Data, true));
     }
 
     @Test
     public void testAdminCannotAddACLToAdminObjPublicDatastream()
             throws ClientProtocolException, IOException {
         assertEquals(
-                "Admin should not be allowed to add an ACL to datastream testparent2/testchild5WithACL/tsc2_data!",
+                "Admin should not be allowed to add an ACL to datastream testparent2/testChild5WithACL/tsc2_data!",
                 FORBIDDEN.getStatusCode(), canAddACL("exampleadmin",
-                        "testparent2/testchild5WithACL/tsc2_data", "EVERYONE",
+                        testParent2 + "/" + testChild5WithACL + "/" + tsc2Data, "EVERYONE",
                         "admin", true));
     }
 
@@ -484,47 +485,47 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
             throws ClientProtocolException, IOException {
         assertEquals("Admin cannot delete object testparent3!", NO_CONTENT
                 .getStatusCode(),
-                canDelete("exampleadmin", "testparent3", true));
+                canDelete("exampleadmin", testParent3, true));
 
         assertEquals(
                 "Admin should not have permission to try to read deleted datastream testparent3/tsp1_data!",
                 FORBIDDEN.getStatusCode(), canDelete("exampleadmin",
-                        "testparent3/tsp1_data", true));
+                        testParent3 + "/" + tsp1Data, true));
 
         assertEquals(
                 "Admin should not have permission to try to read deleted datastream testparent3/tsp2_data!",
                 FORBIDDEN.getStatusCode(), canDelete("exampleadmin",
-                        "testparent3/tsp2_data", true));
+                        testParent3 + "/" + tsp2Data, true));
 
         assertEquals(
                 "Admin should not have permission to try to read deleted object testparent3/testchild3a!",
                 FORBIDDEN.getStatusCode(), canDelete("exampleadmin",
-                        "testparent3/testchild3a", true));
+                        testParent3 + "/" + testChild3A, true));
 
         assertEquals(
                 "Admin should not have permission to try to read deleted object testparent3/testchild3b!",
                 FORBIDDEN.getStatusCode(), canDelete("exampleadmin",
-                        "testparent3/testchild3b", true));
+                        testParent3 + "/" + testChild3B, true));
 
         assertEquals(
                 "Fedora Admin should not be able to read deleted datastream testparent3/tsp1_data!",
                 NOT_FOUND.getStatusCode(), canDelete("fedoraAdmin",
-                        "testparent3/tsp1_data", true));
+                        testParent3 + "/" + tsp1Data, true));
 
         assertEquals(
                 "Fedora Admin should not be able to read deleted datastream testparent3/tsp2_data!",
                 NOT_FOUND.getStatusCode(), canDelete("fedoraAdmin",
-                        "testparent3/tsp2_data", true));
+                        testParent3 + "/" + tsp2Data, true));
 
         assertEquals(
                 "Fedora Admin should not be able to read deleted object testparent3/testchild3a!",
                 NOT_FOUND.getStatusCode(), canDelete("fedoraAdmin",
-                        "testparent3/testchild3a", true));
+                        testParent3 + "/" + testChild3A, true));
 
         assertEquals(
                 "Fedora Admin should not be able to read deleted object testparent3/testchild3b!",
                 NOT_FOUND.getStatusCode(), canDelete("fedoraAdmin",
-                        "testparent3/testchild3b", true));
+                        testParent3 + "/" + testChild3B, true));
     }
 
     /* root node */

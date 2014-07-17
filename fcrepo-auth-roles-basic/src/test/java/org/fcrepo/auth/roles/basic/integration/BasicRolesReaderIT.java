@@ -22,8 +22,9 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.http.client.ClientProtocolException;
 import org.fcrepo.auth.roles.common.integration.RolesFadTestObjectBean;
+
+import org.apache.http.client.ClientProtocolException;
 import org.junit.Test;
 
 /**
@@ -46,7 +47,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
     public void testReaderCanReadOpenObj()
             throws ClientProtocolException, IOException {
         assertEquals("Reader cannot read testparent1!", OK.getStatusCode(),
-                canRead("examplereader", "testparent1", true));
+                canRead("examplereader", testParent1, true));
     }
 
     @Test
@@ -55,7 +56,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to write datastream to testparent1!",
                 FORBIDDEN
-                .getStatusCode(), canAddDS("examplereader", "testparent1",
+                .getStatusCode(), canAddDS("examplereader", testParent1,
                         TESTDS, true));
     }
 
@@ -65,7 +66,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to add an ACL to testparent1!",
                 FORBIDDEN
-                .getStatusCode(), canAddACL("examplereader", "testparent1",
+                .getStatusCode(), canAddACL("examplereader", testParent1,
                         "everyone", "admin", true));
     }
 
@@ -76,7 +77,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
     testReaderCanReadOpenObjWithRestrictedDatastream()
             throws ClientProtocolException, IOException {
         assertEquals("Reader cannot read testparent2!", OK.getStatusCode(),
-                canRead("examplereader", "testparent2", true));
+                canRead("examplereader", testParent2, true));
     }
 
     /* open datastream */
@@ -86,7 +87,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader cannot read datastream testparent2/tsp1_data!", OK
                 .getStatusCode(), canRead("examplereader",
-                        "testparent2/tsp1_data",
+                        testParent2 + "/" + tsp1Data,
                         true));
     }
 
@@ -97,8 +98,8 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to update datastream testparent2/tsp1_data!",
                 FORBIDDEN.getStatusCode(), canUpdateDS("examplereader",
-                        "testparent2",
-                        "tsp1_data", true));
+                        testParent2,
+                        tsp1Data, true));
     }
 
     @Test
@@ -107,7 +108,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to add an ACL to datastream testparent2/tsp1_data!",
                 FORBIDDEN.getStatusCode(), canAddACL("examplereader",
-                        "testparent2/tsp1_data", "everyone", "admin", true));
+                        testParent2 + "/" + tsp1Data, "everyone", "admin", true));
     }
 
     /* restricted datastream */
@@ -117,7 +118,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader cannot read restricted datastream testparent2/tsp2_data!",
                 OK.getStatusCode(), canRead("examplereader",
-                        "testparent2/tsp2_data", true));
+                        testParent2 + "/" + tsp2Data, true));
     }
 
     @Test
@@ -126,8 +127,8 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to update restricted datastream testparent2/tsp2_data!",
                 FORBIDDEN.getStatusCode(), canUpdateDS("examplereader",
-                        "testparent2",
-                        "tsp2_data", true));
+                        testParent2,
+                        tsp2Data, true));
     }
 
     @Test
@@ -136,7 +137,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to add an ACL to restricted datastream testparent2/tsp2_data!",
                 FORBIDDEN.getStatusCode(), canAddACL("examplereader",
-                        "testparent2/tsp2_data", "everyone", "admin", true));
+                        testParent2 + "/" + tsp2Data, "everyone", "admin", true));
     }
 
     /* Child object (inherits ACL), one open datastream */
@@ -146,7 +147,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader cannot read testparent1/testchild1NoACL!", OK
                 .getStatusCode(), canRead("examplereader",
-                        "testparent1/testchild1NoACL",
+                        testParent1 + "/" + testChild1NoACL,
                         true));
     }
 
@@ -156,7 +157,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to write datastream to testparent1/testchild1NoACL!",
                 FORBIDDEN.getStatusCode(), canAddDS("examplereader",
-                        "testparent1/testchild1NoACL", TESTDS, true));
+                        testParent1 + "/" + testChild1NoACL, TESTDS, true));
     }
 
     @Test
@@ -165,7 +166,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to add an ACL to testparent1/testchild1NoACL!",
                 FORBIDDEN.getStatusCode(), canAddACL("examplereader",
-                        "testparent1/testchild1NoACL", "everyone", "admin",
+                        testParent1 + "/" + testChild1NoACL, "everyone", "admin",
                         true));
     }
 
@@ -175,7 +176,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader cannot read datastream testparent1/testchild1NoACL/tsc1_data!",
                 OK.getStatusCode(), canRead("examplereader",
-                        "testparent1/testchild1NoACL/tsc1_data", true));
+                        testParent1 + "/" + testChild1NoACL + "/" + tsc1Data, true));
     }
 
     @Test
@@ -184,7 +185,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to update datastream testparent1/testchild1NoACL/tsc1_data!",
                 FORBIDDEN.getStatusCode(), canUpdateDS("examplereader",
-                        "testparent1/testchild1NoACL", "tsc1_data", true));
+                        testParent1 + "/" + testChild1NoACL, tsc1Data, true));
     }
 
     @Test
@@ -194,7 +195,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to add an ACL to datastream testparent1/testchild1NoACL/tsc1_data!",
                 FORBIDDEN.getStatusCode(), canAddACL("examplereader",
-                        "testparent1/testchild1NoACL/tsc1_data", "everyone",
+                        testParent1 + "/" + testChild1NoACL + "/" + tsc1Data, "everyone",
                         "admin", true));
     }
 
@@ -205,7 +206,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader cannot read testparent1/testchild2WithACL!", OK
                 .getStatusCode(), canRead("examplereader",
-                        "testparent1/testchild2WithACL", true));
+                        testParent1 + "/" + testChild2WithACL, true));
     }
 
     @Test
@@ -214,7 +215,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to write a datastream to testparent1/testchild2WithACL!",
                 FORBIDDEN.getStatusCode(), canAddDS("examplereader",
-                        "testparent1/testchild2WithACL", TESTDS, true));
+                        testParent1 + "/" + testChild2WithACL, TESTDS, true));
     }
 
     @Test
@@ -223,7 +224,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to add an ACL to testparent1/testchild2WithACL!",
                 FORBIDDEN.getStatusCode(), canAddACL("examplereader",
-                        "testparent1/testchild2WithACL", "everyone", "admin",
+                        testParent1 + "/" + testChild2WithACL, "everyone", "admin",
                         true));
     }
 
@@ -233,7 +234,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader cannot read datastream testparent1/testchild2WithACL/tsc1_data!",
                 OK.getStatusCode(), canRead("examplereader",
-                        "testparent1/testchild2WithACL/tsc1_data", true));
+                        testParent1 + "/" + testChild2WithACL + "/" + tsc1Data, true));
     }
 
     @Test
@@ -242,7 +243,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to update datastream testparent1/testchild2WithACL/tsc1_data!",
                 FORBIDDEN.getStatusCode(), canUpdateDS("examplereader",
-                        "testparent1/testchild2WithACL", "tsc1_data", true));
+                        testParent1 + "/" + testChild2WithACL, tsc1Data, true));
     }
 
     @Test
@@ -251,7 +252,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to add an ACL to datastream testparent1/testchild2WithACL/tsc1_data!",
                 FORBIDDEN.getStatusCode(), canAddACL("examplereader",
-                        "testparent1/testchild2WithACL/tsc1_data", "everyone",
+                        testParent1 + "/" + testChild2WithACL + "/" + tsc1Data, "everyone",
                         "admin", true));
     }
 
@@ -262,7 +263,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to read datastream testparent1/testchild2WithACL/tsc2_data!",
                 FORBIDDEN.getStatusCode(), canRead("examplereader",
-                        "testparent1/testchild2WithACL/tsc2_data", true));
+                        testParent1 + "/" + testChild2WithACL + "/" + tsc2Data, true));
     }
 
     @Test
@@ -271,7 +272,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to update datastream testparent1/testchild2WithACL/tsc2_data!",
                 FORBIDDEN.getStatusCode(), canUpdateDS("examplereader",
-                        "testparent1/testchild2WithACL", "tsc2_data", true));
+                        testParent1 + "/" + testChild2WithACL, tsc2Data, true));
     }
 
     @Test
@@ -280,7 +281,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to add an ACL to datastream testparent1/testchild2WithACL/tsc2_data!",
                 FORBIDDEN.getStatusCode(), canAddACL("examplereader",
-                        "testparent1/testchild2WithACL/tsc2_data", "everyone",
+                        testParent1 + "/" + testChild2WithACL + "/" + tsc2Data, "everyone",
                         "admin", true));
     }
 
@@ -291,7 +292,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to read testparent1/testchild4WithACL!",
                 FORBIDDEN.getStatusCode(), canRead("examplereader",
-                        "testparent1/testchild4WithACL", true));
+                        testParent1 + "/" + testChild4WithACL, true));
     }
 
     @Test
@@ -300,7 +301,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to write a datastream to testparent1/testchild4WithACL!",
                 FORBIDDEN.getStatusCode(), canAddDS("examplereader",
-                        "testparent1/testchild4WithACL", TESTDS, true));
+                        testParent1 + "/" + testChild4WithACL, TESTDS, true));
     }
 
     @Test
@@ -309,7 +310,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to add an ACL to testparent1/testchild4WithACL!",
                 FORBIDDEN.getStatusCode(), canAddACL("examplereader",
-                        "testparent1/testchild4WithACL", "everyone", "admin",
+                        testParent1 + "/" + testChild4WithACL, "everyone", "admin",
                         true));
     }
 
@@ -319,7 +320,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to read datastream testparent1/testchild4WithACL/tsc1_data!",
                 FORBIDDEN.getStatusCode(), canRead("examplereader",
-                        "testparent1/testchild4WithACL/tsc1_data", true));
+                        testParent1 + "/" + testChild4WithACL + "/" + tsc1Data, true));
     }
 
     @Test
@@ -328,7 +329,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to update datastream testparent1/testchild4WithACL/tsc1_data!",
                 FORBIDDEN.getStatusCode(), canUpdateDS("examplereader",
-                        "testparent1/testchild4WithACL", "tsc1_data", true));
+                        testParent1 + "/" + testChild4WithACL, tsc1Data, true));
     }
 
     @Test
@@ -337,7 +338,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to add an ACL to datastream testparent1/testchild4WithACL/tsc1_data!",
                 FORBIDDEN.getStatusCode(), canAddACL("examplereader",
-                        "testparent1/testchild4WithACL/tsc1_data", "everyone",
+                        testParent1 + "/" + testChild4WithACL + "/" + tsc1Data, "everyone",
                         "admin", true));
     }
 
@@ -348,7 +349,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to read datastream testparent1/testchild4WithACL/tsc2_data!",
                 FORBIDDEN.getStatusCode(), canRead("examplereader",
-                        "testparent1/testchild4WithACL/tsc2_data", true));
+                        testParent1 + "/" + testChild4WithACL + "/" + tsc2Data, true));
     }
 
     @Test
@@ -357,7 +358,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to update datastream testparent1/testchild4WithACL/tsc2_data!",
                 FORBIDDEN.getStatusCode(), canUpdateDS("examplereader",
-                        "testparent1/testchild4WithACL", "tsc2_data", true));
+                        testParent1 + "/" + testChild4WithACL, tsc2Data, true));
     }
 
     @Test
@@ -366,7 +367,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to add an ACL to datastream testparent1/testchild4WithACL/tsc2_data!",
                 FORBIDDEN.getStatusCode(), canAddACL("examplereader",
-                        "testparent1/testchild4WithACL/tsc2_data", "everyone",
+                        testParent1 + "/" + testChild4WithACL + "/" + tsc2Data, "everyone",
                         "admin", true));
     }
 
@@ -377,7 +378,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to read testparent2/testchild5WithACL!",
                 FORBIDDEN.getStatusCode(), canRead("examplereader",
-                        "testparent2/testchild5WithACL", true));
+                        testParent2 + "/" + testChild5WithACL, true));
     }
 
     @Test
@@ -386,7 +387,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to write a datastream to testparent2/testchild5WithACL!",
                 FORBIDDEN.getStatusCode(), canAddDS("examplereader",
-                        "testparent2/testchild5WithACL", TESTDS, true));
+                        testParent2 + "/" + testChild5WithACL, TESTDS, true));
     }
 
     @Test
@@ -395,7 +396,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to add an ACL to testparent2/testchild5WithACL!",
                 FORBIDDEN.getStatusCode(), canAddACL("examplereader",
-                        "testparent2/testchild5WithACL", "everyone", "admin",
+                        testParent2 + "/" + testChild5WithACL, "everyone", "admin",
                         true));
     }
 
@@ -405,7 +406,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader cannot read datastream testparent2/testchild5WithACL/tsc2_data!",
                 OK.getStatusCode(), canRead("examplereader",
-                        "testparent2/tsp1_data", true));
+                        testParent2 + "/" + tsp1Data, true));
     }
 
     @Test
@@ -414,7 +415,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to update datastream testparent2/testchild5WithACL/tsc2_data!",
                 FORBIDDEN.getStatusCode(), canUpdateDS("examplereader",
-                        "testparent2/testchild5WithACL", "tsc2_data", true));
+                        testParent2 + "/" + testChild5WithACL, tsc2Data, true));
     }
 
     @Test
@@ -423,7 +424,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to add an ACL to datastream testparent2/testchild5WithACL/tsc2_data!",
                 FORBIDDEN.getStatusCode(), canAddACL("examplereader",
-                        "testparent2/testchild5WithACL/tsc2_data", "everyone",
+                        testParent2 + "/" + testChild5WithACL + "/" + tsc2Data, "everyone",
                         "admin", true));
     }
 
@@ -434,7 +435,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to delete object testparent3!",
                 FORBIDDEN
-                .getStatusCode(), canDelete("examplereader", "testparent3",
+                .getStatusCode(), canDelete("examplereader", testParent3,
                         true));
     }
 
@@ -444,7 +445,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to delete datastream testparent3/tsp1_data!",
                 FORBIDDEN.getStatusCode(), canDelete("examplereader",
-                        "testparent3/tsp1_data", true));
+                        testParent3 + "/" + tsp1Data, true));
     }
 
     @Test
@@ -453,7 +454,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to delete datastream testparent3/tsp2_data!",
                 FORBIDDEN.getStatusCode(), canDelete("examplereader",
-                        "testparent3/tsp2_data", true));
+                        testParent3 + "/" + tsp2Data, true));
     }
 
     @Test
@@ -462,7 +463,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to delete object testparent3/testchild3a!",
                 FORBIDDEN.getStatusCode(), canDelete("examplereader",
-                        "testparent3/testchild3a", true));
+                        testParent3 + "/" + testChild3A, true));
     }
 
     @Test
@@ -471,7 +472,7 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Reader should not be allowed to delete object testparent3/testchild3b!",
                 FORBIDDEN.getStatusCode(), canDelete("examplereader",
-                        "testparent3/testchild3b", true));
+                        testParent3 + "/" + testChild3B, true));
     }
 
     /* root node */
