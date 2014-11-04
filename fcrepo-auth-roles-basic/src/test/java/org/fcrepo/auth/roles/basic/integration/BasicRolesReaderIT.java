@@ -37,6 +37,8 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
 
     private final static String TESTDS = "readertestds";
 
+    private final static String TESTCHILD = "readertestchild";
+
     @Override
     protected List<RolesFadTestObjectBean> getTestObjs() {
         return test_objs;
@@ -58,6 +60,16 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
                 FORBIDDEN
                 .getStatusCode(), canAddDS("examplereader", testParent1,
                         TESTDS, true));
+    }
+
+    @Test
+    public void testReaderCannotAddChildToOpenObj()
+            throws ClientProtocolException, IOException {
+        assertEquals(
+                "Reader should not be allowed to add child to testparent1!",
+                FORBIDDEN
+                .getStatusCode(), canAddChild("examplereader", testParent1,
+                        TESTCHILD, true));
     }
 
     @Test
@@ -161,6 +173,15 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
     }
 
     @Test
+    public void testReaderCannotAddChildToInheritedACLChildObj()
+            throws ClientProtocolException, IOException {
+        assertEquals(
+                "Reader should not be allowed to add a child to testparent1/testchild1NoACL!",
+                FORBIDDEN.getStatusCode(), canAddChild("examplereader",
+                        testParent1 + "/" + testChild1NoACL, TESTCHILD, true));
+    }
+
+    @Test
     public void testReaderCannotAddACLToInheritedACLChildObj()
             throws ClientProtocolException, IOException {
         assertEquals(
@@ -216,6 +237,15 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
                 "Reader should not be allowed to write a datastream to testparent1/testchild2WithACL!",
                 FORBIDDEN.getStatusCode(), canAddDS("examplereader",
                         testParent1 + "/" + testChild2WithACL, TESTDS, true));
+    }
+
+    @Test
+    public void testReaderCannotAddChildToRestrictedChildObj()
+            throws ClientProtocolException, IOException {
+        assertEquals(
+                "Reader should not be allowed to add a child to testparent1/testchild2WithACL!",
+                FORBIDDEN.getStatusCode(), canAddChild("examplereader",
+                        testParent1 + "/" + testChild2WithACL, TESTCHILD, true));
     }
 
     @Test
@@ -305,6 +335,15 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
     }
 
     @Test
+    public void testReaderCannotAddChildToWriterRestrictedChildObj()
+            throws ClientProtocolException, IOException {
+        assertEquals(
+                "Reader should not be allowed to add a child to testparent1/testchild4WithACL!",
+                FORBIDDEN.getStatusCode(), canAddChild("examplereader",
+                        testParent1 + "/" + testChild4WithACL, TESTCHILD, true));
+    }
+
+    @Test
     public void testReaderCannotAddACLToWriterRestrictedChildObj()
             throws ClientProtocolException, IOException {
         assertEquals(
@@ -388,6 +427,15 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
                 "Reader should not be allowed to write a datastream to testparent2/testchild5WithACL!",
                 FORBIDDEN.getStatusCode(), canAddDS("examplereader",
                         testParent2 + "/" + testChild5WithACL, TESTDS, true));
+    }
+
+    @Test
+    public void testReaderCannotAddChildToAdminObj()
+            throws ClientProtocolException, IOException {
+        assertEquals(
+                "Reader should not be allowed to add a child to testparent2/testchild5WithACL!",
+                FORBIDDEN.getStatusCode(), canAddChild("examplereader",
+                        testParent2 + "/" + testChild5WithACL, TESTCHILD, true));
     }
 
     @Test
@@ -492,6 +540,15 @@ public class BasicRolesReaderIT extends AbstractBasicRolesIT {
                 "Reader should not be allowed to write a datastream to root node!",
                 FORBIDDEN
                 .getStatusCode(), canAddDS("examplereader", "/", TESTDS, true));
+    }
+
+    @Test
+    public void testReaderCannotAddChildToRootNode()
+            throws ClientProtocolException, IOException {
+        assertEquals(
+                "Reader should not be allowed to add a child to root node!",
+                FORBIDDEN
+                .getStatusCode(), canAddChild("examplereader", "/", TESTCHILD, true));
     }
 
     @Test

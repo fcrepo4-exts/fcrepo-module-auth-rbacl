@@ -32,8 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -55,6 +53,9 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author Gregory Jansen
@@ -189,6 +190,21 @@ public abstract class AbstractRolesIT {
         final HttpResponse response = client.execute(method);
         final int status = response.getStatusLine().getStatusCode();
         logger.debug("canAddACL REST response status code:  {}", status);
+        return status;
+    }
+
+
+    public int canAddChild(final String username, final String path,
+                        final String childName, final boolean is_authenticated)
+            throws IOException {
+        final HttpPut method =
+                putObjMethod(path + "/" + childName);
+        if (is_authenticated) {
+            setAuth(method, username);
+        }
+        final HttpResponse response = client.execute(method);
+        final int status = response.getStatusLine().getStatusCode();
+        logger.debug("canAddChild REST response status code:  {}", status);
         return status;
     }
 

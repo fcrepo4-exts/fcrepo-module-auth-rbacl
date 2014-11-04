@@ -36,6 +36,8 @@ public class BasicRolesUnauthenticatedUserIT extends AbstractBasicRolesIT {
 
     private final static String TESTDS = "uutestds";
 
+    private final static String TESTCHILD = "uutestchild";
+
     @Override
     protected List<RolesFadTestObjectBean> getTestObjs() {
         return test_objs;
@@ -56,6 +58,15 @@ public class BasicRolesUnauthenticatedUserIT extends AbstractBasicRolesIT {
                 "Unauthenticated user should not be allowed to write datastream to testparent1!",
                 FORBIDDEN.getStatusCode(), canAddDS(null, testParent1,
                                                     TESTDS, false));
+    }
+
+    @Test
+    public void testUnauthenticatedReaderCannotAddChildOnOpenObj()
+            throws IOException {
+        assertEquals(
+                "Unauthenticated user should not be allowed to add child to testparent1!",
+                FORBIDDEN.getStatusCode(), canAddChild(null, testParent1,
+                                                    TESTCHILD, false));
     }
 
     @Test
@@ -162,6 +173,16 @@ public class BasicRolesUnauthenticatedUserIT extends AbstractBasicRolesIT {
     }
 
     @Test
+    public void
+    testUnauthenticatedReaderCannotAddChildToInheritedACLChildObj()
+            throws IOException {
+        assertEquals(
+                "Unauthenticated user should not be allowed to add child to testparent1/testchild1NoACL!",
+                FORBIDDEN.getStatusCode(), canAddChild(null,
+                                                    testParent1 + "/" + testChild1NoACL, TESTCHILD, false));
+    }
+
+    @Test
     public void testUnauthenticatedReaderCannotAddACLToInheritedACLChildObj()
             throws IOException {
         assertEquals(
@@ -223,6 +244,16 @@ public class BasicRolesUnauthenticatedUserIT extends AbstractBasicRolesIT {
                 "Unauthenticated user should not be allowed to write datastream to testparent1/testchild2WithACL!",
                 FORBIDDEN.getStatusCode(), canAddDS(null,
                                                     testParent1 + "/" + testChild2WithACL, TESTDS, false));
+    }
+
+    @Test
+    public void
+    testUnauthenticatedReaderCannotAddChildToRestrictedChildObj()
+            throws IOException {
+        assertEquals(
+                "Unauthenticated user should not be allowed to add child to testparent1/testchild2WithACL!",
+                FORBIDDEN.getStatusCode(), canAddChild(null,
+                                                    testParent1 + "/" + testChild2WithACL, TESTCHILD, false));
     }
 
     @Test
@@ -288,6 +319,15 @@ public class BasicRolesUnauthenticatedUserIT extends AbstractBasicRolesIT {
                 "Unauthenticated user should not be allowed to write datastream to testparent2/testchild5WithACL!",
                 FORBIDDEN.getStatusCode(), canAddDS(null,
                                                     testParent2 + "/" + testChild5WithACL, TESTDS, false));
+    }
+
+    @Test
+    public void testUnauthenticatedReaderCannotAddChildToAdminObj()
+            throws IOException {
+        assertEquals(
+                "Unauthenticated user should not be allowed to add child to testparent2/testchild5WithACL!",
+                FORBIDDEN.getStatusCode(), canAddChild(null,
+                                                    testParent2 + "/" + testChild5WithACL, TESTCHILD, false));
     }
 
     @Test
@@ -396,6 +436,14 @@ public class BasicRolesUnauthenticatedUserIT extends AbstractBasicRolesIT {
         assertEquals(
                 "Unauthenticated user should not be allowed to write datastream to root node!",
                 FORBIDDEN.getStatusCode(), canAddDS(null, "/", TESTDS, false));
+    }
+
+    @Test
+    public void testUnauthenticatedReaderCannotAddChildToRootNode()
+            throws IOException {
+        assertEquals(
+                "Unauthenticated user should not be allowed to add child to root node!",
+                FORBIDDEN.getStatusCode(), canAddChild(null, "/", TESTCHILD, false));
     }
 
     @Test
