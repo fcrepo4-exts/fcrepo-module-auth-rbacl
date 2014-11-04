@@ -29,6 +29,7 @@ import javax.ws.rs.core.Response.Status;
 import org.fcrepo.auth.roles.common.integration.RolesFadTestObjectBean;
 
 import org.apache.http.client.ClientProtocolException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -330,7 +331,7 @@ public class BasicRolesWriterIT extends AbstractBasicRolesIT {
             throws ClientProtocolException, IOException {
         assertEquals("Writer cannot read testparent1/testchild4WithACL!", OK
                 .getStatusCode(), canRead("examplewriter",
-                        testParent1 + "/" + testChild4WithACL, true));
+                testParent1 + "/" + testChild4WithACL, true));
     }
 
     @Test
@@ -610,5 +611,15 @@ public class BasicRolesWriterIT extends AbstractBasicRolesIT {
     public void testWriterReaderCanReadACL() throws ClientProtocolException, IOException {
         assertEquals("Writer-reader should be allowed to read ACL permissions", OK.getStatusCode(), canGetRoles(
                 "exampleWriterReader", testParent4, true));
+    }
+
+    @Ignore("Awaiting bug fix for story 72982948")
+    @Test
+    public void testWriterCanAddChildToRestrictedChildObjUnderRestrictedParent()
+            throws ClientProtocolException, IOException {
+        assertEquals(
+                "Writer cannot add child to testparent4/testchild4WithACL!",
+                CREATED.getStatusCode(), canAddChild("examplewriter",
+                        testParent4 + "/" + testChild4WithACL, TESTCHILD, true));
     }
 }

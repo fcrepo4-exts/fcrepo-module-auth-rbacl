@@ -29,6 +29,7 @@ import java.util.List;
 import org.fcrepo.auth.roles.common.integration.RolesFadTestObjectBean;
 
 import org.apache.http.client.ClientProtocolException;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 
@@ -338,7 +339,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
             throws ClientProtocolException, IOException {
         assertEquals("Admin cannot read testparent1/testchild4WithACL!", OK
                 .getStatusCode(), canRead("exampleadmin",
-                        testParent1 + "/" + testChild4WithACL, true));
+                testParent1 + "/" + testChild4WithACL, true));
     }
 
     @Test
@@ -444,7 +445,7 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
     IOException {
         assertEquals("Admin cannot read testparent2/testChild5WithACL!", OK
                 .getStatusCode(), canRead("exampleadmin",
-                        testParent2 + "/" + testChild5WithACL, true));
+                testParent2 + "/" + testChild5WithACL, true));
     }
 
     @Test
@@ -613,5 +614,15 @@ public class BasicRolesAdminIT extends AbstractBasicRolesIT {
                 FORBIDDEN
                 .getStatusCode(), canAddACL("exampleadmin", "/", "EVERYONE",
                         "admin", true));
+    }
+
+    @Ignore("Awaiting bug fix for story 72982948")
+    @Test
+    public void testAdminCanAddChildToRestrictedChildObjUnderRestrictedParent()
+            throws ClientProtocolException, IOException {
+        assertEquals(
+                "Admin cannot add child to testparent4/testchild4WithACL!",
+                CREATED.getStatusCode(), canAddChild("exampleadmin",
+                        testParent4 + "/" + testChild4WithACL, TESTCHILD, true));
     }
 }
