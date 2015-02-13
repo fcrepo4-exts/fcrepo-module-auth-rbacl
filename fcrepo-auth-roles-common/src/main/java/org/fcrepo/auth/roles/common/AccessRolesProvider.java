@@ -15,6 +15,18 @@
  */
 package org.fcrepo.auth.roles.common;
 
+import static com.google.common.collect.Iterables.toArray;
+import static java.util.Collections.emptyMap;
+import static org.fcrepo.auth.roles.common.Constants.registerPrefixes;
+import static org.fcrepo.auth.roles.common.Constants.JcrName.Assignment;
+import static org.fcrepo.auth.roles.common.Constants.JcrName.Rbacl;
+import static org.fcrepo.auth.roles.common.Constants.JcrName.assignment;
+import static org.fcrepo.auth.roles.common.Constants.JcrName.principal;
+import static org.fcrepo.auth.roles.common.Constants.JcrName.rbacl;
+import static org.fcrepo.auth.roles.common.Constants.JcrName.rbaclAssignable;
+import static org.fcrepo.auth.roles.common.Constants.JcrName.role;
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,18 +46,6 @@ import org.fcrepo.kernel.exception.RepositoryRuntimeException;
 import org.modeshape.jcr.value.Path;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
-
-import static com.google.common.collect.Iterables.toArray;
-import static java.util.Collections.emptyMap;
-import static org.fcrepo.auth.roles.common.Constants.registerPrefixes;
-import static org.fcrepo.auth.roles.common.Constants.JcrName.Assignment;
-import static org.fcrepo.auth.roles.common.Constants.JcrName.Rbacl;
-import static org.fcrepo.auth.roles.common.Constants.JcrName.assignment;
-import static org.fcrepo.auth.roles.common.Constants.JcrName.principal;
-import static org.fcrepo.auth.roles.common.Constants.JcrName.rbacl;
-import static org.fcrepo.auth.roles.common.Constants.JcrName.rbaclAssignable;
-import static org.fcrepo.auth.roles.common.Constants.JcrName.role;
-import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Provides the effective access roles for authorization.
@@ -70,7 +70,7 @@ public class AccessRolesProvider {
     public Map<String, List<String>> getRoles(final Node node, final boolean effective) {
         try {
             LOGGER.debug("Finding roles for: {}, effective={}", node.getPath(), effective);
-        } catch (RepositoryException e) {
+        } catch (final RepositoryException e) {
             LOGGER.debug("Unable to get path! {}", e.getMessage());
         }
 
@@ -116,7 +116,7 @@ public class AccessRolesProvider {
      * @throws RepositoryException
      */
     private void getAssignments(final Node node, final Map<String, List<String>> data)
-        throws RepositoryException {
+            throws RepositoryException {
 
         if (node.isNodeType(rbaclAssignable.getQualified())) {
             try {
@@ -126,11 +126,11 @@ public class AccessRolesProvider {
                     final Node assign = ni.nextNode();
                     final String principalName =
                             assign.getProperty(principal.getQualified())
-                                    .getString();
+                            .getString();
                     if (principalName == null ||
                             principalName.trim().length() == 0) {
                         LOGGER.warn("found empty principal name on node {}",
-                                    node.getPath());
+                                node.getPath());
                     } else {
                         List<String> roles = data.get(principalName);
                         if (roles == null) {
@@ -141,7 +141,7 @@ public class AccessRolesProvider {
                                 role.getQualified()).getValues()) {
                             if (v == null || v.toString().trim().length() == 0) {
                                 LOGGER.warn("found empty role name on node {}",
-                                            node.getPath());
+                                        node.getPath());
                             } else {
                                 roles.add(v.toString());
                             }
@@ -150,8 +150,8 @@ public class AccessRolesProvider {
                 }
             } catch (final PathNotFoundException e) {
                 LOGGER.info(
-                             "Found rbaclAssignable mixin without a corresponding node at {}",
-                             node.getPath());
+                        "Found rbaclAssignable mixin without a corresponding node at {}",
+                        node.getPath());
             }
         }
     }
@@ -161,9 +161,10 @@ public class AccessRolesProvider {
      *
      * @param node the Node to edit
      * @param data the roles to assign
+     * @throws RepositoryException if repository exception occurred
      */
     public void postRoles(final Node node, final Map<String, Set<String>> data)
-        throws RepositoryException {
+            throws RepositoryException {
         final Session session = node.getSession();
         registerPrefixes(session);
         if (!node.isNodeType(rbaclAssignable.getQualified())) {
@@ -192,7 +193,8 @@ public class AccessRolesProvider {
     /**
      * Deletes all roles assigned on this node and removes the mixin type.
      *
-     * @param node
+     * @param node the node to delete
+     * @throws RepositoryException if delete failed
      */
     public void deleteRoles(final Node node) throws RepositoryException {
         final Session session = node.getSession();
@@ -215,7 +217,7 @@ public class AccessRolesProvider {
      *
      * @param absPath the real or potential node path
      * @return the roles assigned to each principal
-     * @throws RepositoryException
+     * @throws RepositoryException if PathNotFoundException can not handle
      */
     public Map<String, List<String>> findRolesForPath(final Path absPath,
             final Session session) throws RepositoryException {

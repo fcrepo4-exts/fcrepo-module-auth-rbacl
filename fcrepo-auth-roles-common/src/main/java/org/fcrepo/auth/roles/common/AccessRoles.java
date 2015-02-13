@@ -46,7 +46,6 @@ import org.fcrepo.http.commons.api.rdf.HttpResourceConverter;
 import org.fcrepo.kernel.identifiers.IdentifierConverter;
 import org.fcrepo.kernel.models.FedoraBinary;
 import org.fcrepo.kernel.models.FedoraResource;
-
 import org.jvnet.hk2.annotations.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,7 +96,7 @@ public class AccessRoles extends AbstractResource {
 
     /**
      * Create a new FedoraNodes instance for a given path
-     * @param externalPath
+     * @param externalPath external path
      */
     @VisibleForTesting
     public AccessRoles(final String externalPath) {
@@ -115,8 +114,8 @@ public class AccessRoles extends AbstractResource {
     /**
      * Retrieve the roles assigned to each principal on this specific path.
      *
+     * @param effective the effective roles
      * @return JSON representation of assignment map
-     * @throws RepositoryException
      */
     @GET
     @Produces(APPLICATION_JSON)
@@ -152,15 +151,15 @@ public class AccessRoles extends AbstractResource {
     /**
      * Apply new role assignments at the specified node.
      *
-     * @param data
+     * @param data access roles
      * @return response
-     * @throws RepositoryException
+     * @throws RepositoryException if IllegalArgumentException can not handle
      */
     @POST
     @Consumes(APPLICATION_JSON)
     @Timed
     public Response post(final Map<String, Set<String>> data)
-        throws RepositoryException {
+            throws RepositoryException {
         LOGGER.debug("POST Received request param: {}", request);
         Response.ResponseBuilder response;
 
@@ -217,6 +216,8 @@ public class AccessRoles extends AbstractResource {
 
     /**
      * Delete the access roles and node type.
+     * @return response
+     * @throws RepositoryException if delete failed
      */
     @DELETE
     @Timed
