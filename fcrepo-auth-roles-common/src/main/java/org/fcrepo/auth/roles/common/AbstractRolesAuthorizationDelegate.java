@@ -64,7 +64,7 @@ public abstract class AbstractRolesAuthorizationDelegate implements FedoraAuthor
      */
     public static Set<String>
     resolveUserRoles(final Map<String, List<String>> acl,
-            final Set<Principal> principals) {
+                    final Set<Principal> principals) {
         final Set<String> roles = new HashSet<>();
         for (final Principal p : principals) {
             final List<String> matchedRoles = acl.get(p.getName());
@@ -163,13 +163,13 @@ public abstract class AbstractRolesAuthorizationDelegate implements FedoraAuthor
      * @return true if permitted
      */
     private boolean canRemoveChildrenRecursive(final Session userSession,
-            final String parentPath,
-            final Set<Principal> allPrincipals,
-            final Set<String> parentRoles) {
+                                               final String parentPath,
+                                               final Set<Principal> allPrincipals,
+                                               final Set<String> parentRoles) {
         try {
             final Session internalSession = sessionFactory.getInternalSession();
             LOGGER.debug("Recursive child remove permission checks for: {}",
-                    parentPath);
+                         parentPath);
             final Node parent = internalSession.getNode(parentPath);
             if (!parent.hasNodes()) {
                 return true;
@@ -210,7 +210,7 @@ public abstract class AbstractRolesAuthorizationDelegate implements FedoraAuthor
     /**
      * Subclasses must override this method to determine permissions based on
      * supplied roles.
-     *
+     * 
      * @param userSession the user session
      * @param absPath path to the object
      * @param actions requested action

@@ -48,7 +48,7 @@ public class AccessRolesTypes {
     /**
      * Initialize, register role assignment node types.
      *
-     * @throws IOException if IO exception occurred
+     * @throws IOException if io exception occurred
      */
     @PostConstruct
     public void setUpRepositoryConfiguration() throws IOException {
@@ -61,10 +61,10 @@ public class AccessRolesTypes {
             session = sessions.getInternalSession();
             final NodeTypeManager mgr =
                     (NodeTypeManager) session.getWorkspace()
-                    .getNodeTypeManager();
+                            .getNodeTypeManager();
             final URL cnd =
                     AccessRoles.class
-                    .getResource("/cnd/access-control.cnd");
+                            .getResource("/cnd/access-control.cnd");
             final NodeTypeIterator nti =
                     mgr.registerNodeTypes(cnd, true);
             while (nti.hasNext()) {

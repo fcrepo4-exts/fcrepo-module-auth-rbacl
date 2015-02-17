@@ -46,6 +46,7 @@ import org.fcrepo.http.commons.api.rdf.HttpResourceConverter;
 import org.fcrepo.kernel.identifiers.IdentifierConverter;
 import org.fcrepo.kernel.models.FedoraBinary;
 import org.fcrepo.kernel.models.FedoraResource;
+
 import org.jvnet.hk2.annotations.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -159,7 +160,7 @@ public class AccessRoles extends AbstractResource {
     @Consumes(APPLICATION_JSON)
     @Timed
     public Response post(final Map<String, Set<String>> data)
-            throws RepositoryException {
+        throws RepositoryException {
         LOGGER.debug("POST Received request param: {}", request);
         Response.ResponseBuilder response;
 
