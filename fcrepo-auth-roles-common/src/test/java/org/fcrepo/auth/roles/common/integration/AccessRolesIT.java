@@ -43,7 +43,7 @@ public class AccessRolesIT extends AbstractCommonRolesIT {
 
     /**
      * Test method for
-     * {@link org.fcrepo.auth.roles.common.AccessRoles#get(java.util.List)}.
+     * {@link org.fcrepo.auth.roles.common.AccessRoles#get}.
      *
      * @throws IOException
      * @throws ClientProtocolException
@@ -57,7 +57,7 @@ public class AccessRolesIT extends AbstractCommonRolesIT {
 
     /**
      * Test method for
-     * {@link org.fcrepo.auth.roles.common.AccessRoles#get(java.util.List)}.
+     * {@link org.fcrepo.auth.roles.common.AccessRoles#get}.
      *
      * @throws IOException
      * @throws ClientProtocolException
@@ -91,7 +91,7 @@ public class AccessRolesIT extends AbstractCommonRolesIT {
 
     /**
      * Test method for
-     * {@link org.fcrepo.auth.roles.common.AccessRoles#get(java.util.List, java.util.List)}
+     * {@link org.fcrepo.auth.roles.common.AccessRoles#get}
      * .
      *
      * @throws IOException
