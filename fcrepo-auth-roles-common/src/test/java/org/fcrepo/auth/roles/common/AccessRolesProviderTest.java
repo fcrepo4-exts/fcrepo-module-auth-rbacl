@@ -85,7 +85,7 @@ public class AccessRolesProviderTest {
         initMocks(this);
         when(node.getSession()).thenReturn(session);
 
-        provider = new AccessRolesProvider();
+        provider = new RbAclAccessRolesProvider();
 
         setupPrincipalNode(principalNode1, principalProperty1, "principal",
                 "role");
