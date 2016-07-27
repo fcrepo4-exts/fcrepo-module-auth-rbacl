@@ -17,12 +17,12 @@
  */
 package org.fcrepo.auth.roles.common;
 
-import static com.hp.hpl.jena.rdf.model.ResourceFactory.createProperty;
+import static org.apache.jena.rdf.model.ResourceFactory.createProperty;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import com.hp.hpl.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Property;
 
 /**
  * Reference values for access roles node types and paths.
