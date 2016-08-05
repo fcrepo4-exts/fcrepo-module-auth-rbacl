@@ -125,18 +125,6 @@
         <artifactId>junit</artifactId>
         <version>4.11</version>
       </dependency>
-      <dependency>
-        <groupId>org.infinispan</groupId>
-        <artifactId>infinispan-cachestore-leveldb</artifactId>
-        <version>${infinispan.version}</version>
-        <exclusions>
-          <!-- leveldbjni platform-specific builds pull in different versions of this dep; we'll pull in the latest below. -->
-          <exclusion>
-            <groupId>org.fusesource.leveldbjni</groupId>
-            <artifactId>leveldbjni</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
       <!-- This dependency is for compile-time: it keeps this module independent
         of any given choice of JAX-RS implementation. It must be _after_ the test
         gear. Otherwise it will get loaded during test phase, but because this is

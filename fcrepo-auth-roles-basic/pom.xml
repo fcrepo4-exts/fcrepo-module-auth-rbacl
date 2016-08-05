@@ -40,12 +40,6 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.infinispan</groupId>
-      <artifactId>infinispan-cachestore-leveldb</artifactId>
-      <scope>test</scope>
-    </dependency>
-
 
     <dependency>
       <groupId>org.glassfish.grizzly</groupId>
