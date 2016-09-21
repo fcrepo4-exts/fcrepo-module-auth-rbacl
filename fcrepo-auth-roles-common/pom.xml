@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.fcrepo</groupId>
     <artifactId>fcrepo-module-auth-rbacl</artifactId>
-    <version>4.7.0-SNAPSHOT</version>
+    <version>4.8.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>fcrepo-auth-roles-common</artifactId>
