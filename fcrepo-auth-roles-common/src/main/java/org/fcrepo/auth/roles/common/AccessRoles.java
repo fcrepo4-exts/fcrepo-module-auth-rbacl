@@ -27,7 +27,6 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -46,6 +45,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.fcrepo.http.commons.AbstractResource;
 import org.fcrepo.http.commons.api.rdf.HttpResourceConverter;
+import org.fcrepo.kernel.api.FedoraSession;
 import org.fcrepo.kernel.api.identifiers.IdentifierConverter;
 import org.fcrepo.kernel.api.models.FedoraBinary;
 import org.fcrepo.kernel.api.models.FedoraResource;
@@ -76,7 +76,7 @@ public class AccessRoles extends AbstractResource {
 
 
     @Inject
-    protected Session session;
+    protected FedoraSession session;
 
     @Inject
     @Optional
@@ -152,7 +152,7 @@ public class AccessRoles extends AbstractResource {
                 }
             }
         } finally {
-            session.logout();
+            session.expire();
         }
         return response.build();
     }
@@ -182,7 +182,7 @@ public class AccessRoles extends AbstractResource {
             } else {
                 this.getAccessRolesProvider().postRoles(getJcrNode(resource), data);
             }
-            session.save();
+            session.commit();
             LOGGER.debug("Saved access roles {}", data);
             response =
                     Response.created(getUriInfo().getBaseUriBuilder()
@@ -191,7 +191,7 @@ public class AccessRoles extends AbstractResource {
         } catch (final IllegalArgumentException e) {
             throw new WebApplicationException(e, Response.status(Status.BAD_REQUEST).build());
         } finally {
-            session.logout();
+            session.expire();
         }
 
         return response.build();
@@ -242,10 +242,10 @@ public class AccessRoles extends AbstractResource {
             }
 
             this.getAccessRolesProvider().deleteRoles(node);
-            session.save();
+            session.commit();
             return Response.noContent().build();
         } finally {
-            session.logout();
+            session.expire();
         }
     }
 

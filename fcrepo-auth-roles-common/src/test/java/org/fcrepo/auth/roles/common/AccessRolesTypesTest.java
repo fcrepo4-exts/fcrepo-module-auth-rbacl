@@ -24,7 +24,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.io.IOException;
 import java.net.URL;
@@ -37,18 +36,21 @@ import javax.jcr.nodetype.NodeTypeIterator;
 
 import org.fcrepo.http.commons.session.SessionFactory;
 import org.fcrepo.kernel.api.exception.RepositoryRuntimeException;
+import org.fcrepo.kernel.modeshape.FedoraSessionImpl;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.modeshape.jcr.api.nodetype.NodeTypeManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * @author bbpennel
  * @since Feb 17, 2014
  */
+@RunWith(MockitoJUnitRunner.class)
 public class AccessRolesTypesTest {
 
     private static final Logger LOGGER = LoggerFactory
@@ -61,7 +63,10 @@ public class AccessRolesTypesTest {
     private Workspace workspace;
 
     @Mock
-    private Session session;
+    private Session jcrSession;
+
+    @Mock
+    private FedoraSessionImpl session;
 
     private AccessRolesTypes accessRolesTypes;
 
@@ -73,9 +78,7 @@ public class AccessRolesTypesTest {
 
     @Before
     public void setUp() throws RepositoryException, IOException {
-        initMocks(this);
-
-        when(session.getWorkspace()).thenReturn(workspace);
+        when(jcrSession.getWorkspace()).thenReturn(workspace);
         when(workspace.getNodeTypeManager()).thenReturn(nodeTypeManager);
 
         final NodeTypeIterator mockNTI = mock(NodeTypeIterator.class);
@@ -90,6 +93,7 @@ public class AccessRolesTypesTest {
         setField(accessRolesTypes, "sessionFactory", sessionFactory);
 
         when(sessionFactory.getInternalSession()).thenReturn(session);
+        when(session.getJcrSession()).thenReturn(jcrSession);
     }
 
     @Test(expected = RepositoryRuntimeException.class)
@@ -102,8 +106,8 @@ public class AccessRolesTypesTest {
         } finally {
             verify(nodeTypeManager, never()).registerNodeTypes(any(URL.class),
                     anyBoolean());
-            verify(session, never()).save();
-            verify(session, never()).logout();
+            verify(session, never()).commit();
+            verify(session, never()).expire();
         }
     }
 
@@ -118,8 +122,8 @@ public class AccessRolesTypesTest {
         } finally {
             verify(nodeTypeManager, never()).registerNodeTypes(any(URL.class),
                     anyBoolean());
-            verify(session, never()).save();
-            verify(session).logout();
+            verify(session, never()).commit();
+            verify(session).expire();
         }
     }
 
@@ -128,7 +132,7 @@ public class AccessRolesTypesTest {
         accessRolesTypes.setUpRepositoryConfiguration();
 
         verify(nodeTypeManager).registerNodeTypes(any(URL.class), anyBoolean());
-        verify(session).save();
-        verify(session).logout();
+        verify(session).commit();
+        verify(session).expire();
     }
 }

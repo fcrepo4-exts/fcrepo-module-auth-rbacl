@@ -23,16 +23,18 @@ import java.net.URL;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.NodeTypeIterator;
 
 import org.fcrepo.http.commons.session.SessionFactory;
+import org.fcrepo.kernel.api.FedoraSession;
 import org.fcrepo.kernel.api.exception.RepositoryRuntimeException;
 import org.modeshape.jcr.api.nodetype.NodeTypeManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import static org.fcrepo.kernel.modeshape.FedoraSessionImpl.getJcrSession;
 
 /**
  * @author Gregory Jansen
@@ -58,11 +60,11 @@ public class AccessRolesTypes {
     }
 
     private void registerNodeTypes(final SessionFactory sessions) throws IOException {
-        Session session = null;
+        FedoraSession session = null;
         try {
             session = sessions.getInternalSession();
             final NodeTypeManager mgr =
-                    (NodeTypeManager) session.getWorkspace()
+                    (NodeTypeManager) getJcrSession(session).getWorkspace()
                             .getNodeTypeManager();
             final URL cnd =
                     AccessRoles.class
@@ -73,14 +75,13 @@ public class AccessRolesTypes {
                 final NodeType nt = nti.nextNodeType();
                 LOGGER.debug("registered node type: {}", nt.getName());
             }
-            session.save();
+            session.commit();
             LOGGER.debug("Registered access role node types");
-
         } catch (final RepositoryException e) {
             throw new RepositoryRuntimeException(e);
         } finally {
             if (session != null) {
-                session.logout();
+                session.expire();
             }
         }
     }

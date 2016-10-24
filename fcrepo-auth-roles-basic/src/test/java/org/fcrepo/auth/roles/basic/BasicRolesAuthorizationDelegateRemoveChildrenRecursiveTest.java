@@ -27,13 +27,15 @@ import static org.fcrepo.kernel.modeshape.testutilities.TestNodeIterator.nodeIte
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 import org.fcrepo.auth.roles.common.AccessRolesProvider;
 import org.fcrepo.http.commons.session.SessionFactory;
+import org.fcrepo.kernel.modeshape.FedoraSessionImpl;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.modeshape.jcr.value.Path;
 
 import javax.jcr.Node;
@@ -48,6 +50,7 @@ import java.util.Set;
 /**
  * @author Mike Daines
  */
+@RunWith(MockitoJUnitRunner.class)
 public class BasicRolesAuthorizationDelegateRemoveChildrenRecursiveTest {
 
     private static final String[] REMOVE_ACTION = {"remove"};
@@ -64,44 +67,28 @@ public class BasicRolesAuthorizationDelegateRemoveChildrenRecursiveTest {
     private Session mockSession;
 
     @Mock
+    private FedoraSessionImpl mockFedoraSession;
+
+    @Mock
     private Principal principal;
 
     private Set<Principal> allPrincipals;
 
     @Mock
-    private Path parentPath;
+    private Path parentPath, writablePath, readablePath, noAclPath;
 
     @Mock
-    private Node parentNode;
-
-    @Mock
-    private Path writablePath;
-
-    @Mock
-    private Node writableNode;
-
-    @Mock
-    private Path readablePath;
-
-    @Mock
-    private Node readableNode;
-
-    @Mock
-    private Path noAclPath;
-
-    @Mock
-    private Node noAclNode;
+    private Node parentNode, writableNode, readableNode, noAclNode;
 
     @Before
     public void setUp() throws RepositoryException {
-        initMocks(this);
-
         authorizationDelegate = new BasicRolesAuthorizationDelegate();
         setField(authorizationDelegate, "accessRolesProvider",
                 accessRolesProvider);
         setField(authorizationDelegate, "sessionFactory", sessionFactory);
 
-        when(sessionFactory.getInternalSession()).thenReturn(mockSession);
+        when(sessionFactory.getInternalSession()).thenReturn(mockFedoraSession);
+        when(mockFedoraSession.getJcrSession()).thenReturn(mockSession);
 
         when(principal.getName()).thenReturn("user");
         allPrincipals = singleton(principal);
