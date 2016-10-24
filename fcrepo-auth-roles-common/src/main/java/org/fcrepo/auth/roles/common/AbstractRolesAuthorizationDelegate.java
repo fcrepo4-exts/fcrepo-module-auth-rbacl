@@ -18,6 +18,7 @@
 package org.fcrepo.auth.roles.common;
 
 import static java.util.stream.Collectors.toSet;
+import static org.fcrepo.kernel.modeshape.FedoraSessionImpl.getJcrSession;
 
 import java.security.Principal;
 import java.util.Arrays;
@@ -34,6 +35,7 @@ import javax.jcr.Session;
 
 import org.fcrepo.auth.common.FedoraAuthorizationDelegate;
 import org.fcrepo.http.commons.session.SessionFactory;
+import org.fcrepo.kernel.api.FedoraSession;
 import org.fcrepo.kernel.api.exception.RepositoryRuntimeException;
 import org.modeshape.jcr.value.Path;
 import org.slf4j.Logger;
@@ -98,10 +100,10 @@ public abstract class AbstractRolesAuthorizationDelegate implements FedoraAuthor
         }
 
         try {
-            final Session internalSession = sessionFactory.getInternalSession();
+            final FedoraSession internalSession = sessionFactory.getInternalSession();
             final Map<String, Collection<String>> acl =
                     accessRolesProvider.findRolesForPath(absPath,
-                            internalSession);
+                            getJcrSession(internalSession));
             roles = resolveUserRoles(acl, allPrincipals);
             LOGGER.debug("roles for this request: {}", roles);
         } catch (final RepositoryException e) {
@@ -166,10 +168,10 @@ public abstract class AbstractRolesAuthorizationDelegate implements FedoraAuthor
                                                final Set<Principal> allPrincipals,
                                                final Set<String> parentRoles) {
         try {
-            final Session internalSession = sessionFactory.getInternalSession();
+            final FedoraSession internalSession = sessionFactory.getInternalSession();
             LOGGER.debug("Recursive child remove permission checks for: {}",
                     parentPath);
-            final Item item = internalSession.getItem(parentPath);
+            final Item item = getJcrSession(internalSession).getItem(parentPath);
             if (!item.isNode()) {
                 // this is a property and has no children...
                 return true;

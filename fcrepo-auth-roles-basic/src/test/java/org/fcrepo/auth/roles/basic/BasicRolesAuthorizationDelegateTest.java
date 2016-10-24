@@ -26,14 +26,16 @@ import static org.fcrepo.http.commons.test.util.TestHelpers.setField;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
+import org.fcrepo.kernel.modeshape.FedoraSessionImpl;
 import org.fcrepo.auth.roles.common.AccessRolesProvider;
 import org.fcrepo.auth.roles.common.Constants.JcrName;
 import org.fcrepo.http.commons.session.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.modeshape.jcr.value.Path;
 
 import javax.jcr.RepositoryException;
@@ -48,6 +50,7 @@ import java.util.Set;
 /**
  * @author Mike Daines
  */
+@RunWith(MockitoJUnitRunner.class)
 public class BasicRolesAuthorizationDelegateTest {
 
     private static final String[] READ_ACTION = {"read"};
@@ -61,6 +64,9 @@ public class BasicRolesAuthorizationDelegateTest {
 
     @Mock
     private SessionFactory sessionFactory;
+
+    @Mock
+    private FedoraSessionImpl mockFedoraSession;
 
     @Mock
     private Session mockSession;
@@ -90,18 +96,17 @@ public class BasicRolesAuthorizationDelegateTest {
 
     @Before
     public void setUp() throws RepositoryException {
-        initMocks(this);
-
         authorizationDelegate = new BasicRolesAuthorizationDelegate();
         setField(authorizationDelegate, "accessRolesProvider",
                 accessRolesProvider);
         setField(authorizationDelegate, "sessionFactory", sessionFactory);
 
-        when(sessionFactory.getInternalSession()).thenReturn(mockSession);
+        when(sessionFactory.getInternalSession()).thenReturn(mockFedoraSession);
 
         when(principal.getName()).thenReturn("user");
         allPrincipals = singleton(principal);
 
+        when(mockFedoraSession.getJcrSession()).thenReturn(mockSession);
         when(mockSession.getAttribute(FEDORA_USER_PRINCIPAL)).thenReturn(
                 principal);
         when(mockSession.getAttribute(FEDORA_ALL_PRINCIPALS)).thenReturn(

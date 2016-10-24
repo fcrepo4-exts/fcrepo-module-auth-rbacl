@@ -27,7 +27,6 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.net.URI;
@@ -46,18 +45,23 @@ import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
+import org.fcrepo.kernel.api.FedoraSession;
 import org.fcrepo.kernel.api.models.FedoraResource;
 import org.fcrepo.kernel.api.exception.RepositoryRuntimeException;
 import org.fcrepo.kernel.api.services.NodeService;
+import org.fcrepo.kernel.modeshape.FedoraSessionImpl;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Matchers;
 import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 /**
  * @author bbpennel
  * @since Feb 12, 2014
  */
+@RunWith(MockitoJUnitRunner.class)
 public class AccessRolesTest {
 
     @Mock
@@ -78,26 +82,29 @@ public class AccessRolesTest {
     @Mock
     private PathSegment rootPath;
 
-    private Session session;
+    @Mock
+    private FedoraSessionImpl session;
 
     private AccessRoles accessRoles;
 
     @Mock
-    private javax.jcr.Node mockNode;
+    private Node mockNode;
+
+    private Session jcrSession;
 
     @Before
     public void setUp() throws RepositoryException {
-        initMocks(this);
         accessRoles = new AccessRoles("/some/path");
         setField(accessRoles, "accessRolesProvider", accessRolesProvider);
         setField(accessRoles, "request", request);
         setField(accessRoles, "nodeService", nodeService);
-        session = mockSession(accessRoles);
+        jcrSession = mockSession(accessRoles);
         setField(accessRoles, "session", session);
 
-        when(session.getNode("/some/path")).thenReturn(mockNode);
+        when(session.getJcrSession()).thenReturn(jcrSession);
+        when(jcrSession.getNode("/some/path")).thenReturn(mockNode);
 
-        when(nodeService.find(any(Session.class), anyString()))
+        when(nodeService.find(any(FedoraSession.class), anyString()))
                 .thenReturn(fedoraResource);
 
     }
@@ -116,7 +123,7 @@ public class AccessRolesTest {
         assertNull("Response entity should not have been set", response
                 .getEntity());
 
-        verify(session).logout();
+        verify(session).expire();
 
         assertEquals("NoContent response expected when no data found", Response
                 .noContent().build().getStatus(), response.getStatus());
@@ -137,7 +144,7 @@ public class AccessRolesTest {
                 "Response entity should match the roles data assigned to the node",
                 response.getEntity(), rolesData);
 
-        verify(session).logout();
+        verify(session).expire();
 
         // Ensure that it attempted to retrieve roles
         verify(accessRolesProvider).getRoles(any(Node.class), anyBoolean());
@@ -146,14 +153,14 @@ public class AccessRolesTest {
     @Test(expected = RepositoryRuntimeException.class)
     public void testGetException() throws RepositoryException {
 
-        when(session.getNode("/some/path")).thenThrow(
+        when(jcrSession.getNode("/some/path")).thenThrow(
                 new RepositoryRuntimeException("expected"));
 
         try {
             accessRoles.get("");
         } finally {
             // Verify that session logout occurred and no work happened
-            verify(session).logout();
+            verify(session).expire();
             verify(accessRolesProvider, never()).getRoles(any(Node.class),
                     anyBoolean());
         }
@@ -227,8 +234,8 @@ public class AccessRolesTest {
             verify(accessRolesProvider, never()).postRoles(any(Node.class),
                     Matchers.<Map<String, Set<String>>>any());
             // Verify no changes saved
-            verify(session, never()).save();
-            verify(session).logout();
+            verify(session, never()).commit();
+            verify(session).expire();
         }
     }
 
@@ -247,8 +254,8 @@ public class AccessRolesTest {
         // Check that work was called
         verify(accessRolesProvider).postRoles(any(Node.class),
                 Matchers.<Map<String, Set<String>>>any());
-        verify(session).save();
-        verify(session).logout();
+        verify(session).commit();
+        verify(session).expire();
 
         assertEquals("Status code must be CREATED", 201, response.getStatus());
         assertEquals("Response path should reference accessroles",
@@ -272,8 +279,8 @@ public class AccessRolesTest {
         } finally {
             verify(accessRolesProvider).postRoles(any(Node.class),
                     Matchers.<Map<String, Set<String>>>any());
-            verify(session, never()).save();
-            verify(session).logout();
+            verify(session, never()).commit();
+            verify(session).expire();
         }
     }
 
@@ -286,8 +293,8 @@ public class AccessRolesTest {
 
         verify(accessRolesProvider).deleteRoles(any(Node.class));
 
-        verify(session).save();
-        verify(session).logout();
+        verify(session).commit();
+        verify(session).expire();
     }
 
     @Test(expected = RepositoryException.class)
@@ -300,8 +307,8 @@ public class AccessRolesTest {
         } finally {
             verify(accessRolesProvider).deleteRoles(any(Node.class));
 
-            verify(session, never()).save();
-            verify(session).logout();
+            verify(session, never()).commit();
+            verify(session).expire();
         }
     }
 }
