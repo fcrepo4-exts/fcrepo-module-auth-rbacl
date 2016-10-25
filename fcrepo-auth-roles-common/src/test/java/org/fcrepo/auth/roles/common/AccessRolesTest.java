@@ -45,6 +45,7 @@ import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
+import org.fcrepo.http.commons.session.HttpSession;
 import org.fcrepo.kernel.api.FedoraSession;
 import org.fcrepo.kernel.api.models.FedoraResource;
 import org.fcrepo.kernel.api.exception.RepositoryRuntimeException;
@@ -83,9 +84,12 @@ public class AccessRolesTest {
     private PathSegment rootPath;
 
     @Mock
-    private FedoraSessionImpl session;
+    private FedoraSessionImpl fedoraSession;
 
     private AccessRoles accessRoles;
+
+    @Mock
+    private HttpSession session;
 
     @Mock
     private Node mockNode;
@@ -101,7 +105,8 @@ public class AccessRolesTest {
         jcrSession = mockSession(accessRoles);
         setField(accessRoles, "session", session);
 
-        when(session.getJcrSession()).thenReturn(jcrSession);
+        when(session.getFedoraSession()).thenReturn(fedoraSession);
+        when(fedoraSession.getJcrSession()).thenReturn(jcrSession);
         when(jcrSession.getNode("/some/path")).thenReturn(mockNode);
 
         when(nodeService.find(any(FedoraSession.class), anyString()))
