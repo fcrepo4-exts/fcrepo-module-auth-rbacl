@@ -1,0 +1,9 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Fedora Repository Authorization Roles Commons,org.fcrepo.auth.roles.common,AbstractRolesAuthorizationDelegate,316,0,34,0,73,0,26,0,9,0
+Fedora Repository Authorization Roles Commons,org.fcrepo.auth.roles.common,Constants.JcrName,18,116,0,0,3,9,5,3,5,3
+Fedora Repository Authorization Roles Commons,org.fcrepo.auth.roles.common,AccessRolesTypes,13,57,3,3,2,24,2,5,0,4
+Fedora Repository Authorization Roles Commons,org.fcrepo.auth.roles.common,AccessRolesResources,40,0,2,0,10,0,3,0,2,0
+Fedora Repository Authorization Roles Commons,org.fcrepo.auth.roles.common,Constants,3,5,0,0,2,2,1,1,1,1
+Fedora Repository Authorization Roles Commons,org.fcrepo.auth.roles.common,AccessRoles,83,222,11,21,14,57,12,16,1,11
+Fedora Repository Authorization Roles Commons,org.fcrepo.auth.roles.common,RbAclAccessRolesProvider,99,263,16,28,27,67,14,15,1,6
+Fedora Repository Authorization Roles Commons,org.fcrepo.auth.roles.common,AccessRolesProvider,0,3,0,0,0,1,0,1,0,1
