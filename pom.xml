@@ -128,7 +128,8 @@
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.11</version>
+        <version>${junit.version}</version>
+        <scope>test</scope>
       </dependency>
       <!-- This dependency is for compile-time: it keeps this module independent
         of any given choice of JAX-RS implementation. It must be _after_ the test
