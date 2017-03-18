@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AccessRolesProvider.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fedora Repository Authorization Roles Commons</a> &gt; <a href="index.source.html" class="el_package">org.fcrepo.auth.roles.common</a> &gt; <span class="el_source">AccessRolesProvider.java</span></div><h1>AccessRolesProvider.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to DuraSpace under one or more contributor license agreements.
+ * See the NOTICE file distributed with this work for additional information
+ * regarding copyright ownership.
+ *
+ * DuraSpace licenses this file to you under the Apache License,
+ * Version 2.0 (the &quot;License&quot;); you may not use this file except in
+ * compliance with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.fcrepo.auth.roles.common;
+
+import static java.util.Collections.emptyMap;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+
+import org.modeshape.jcr.value.Path;
+
+/**
+ * Provides the effective access roles for authorization.
+ *
+ * @author Gregory Jansen
+ * @author whikloj
+ */
+public interface AccessRolesProvider {
+
+<span class="fc" id="L40">    public static final Map&lt;String, Collection&lt;String&gt;&gt; DEFAULT_ACCESS_ROLES = emptyMap();</span>
+
+    /**
+     * Get the roles assigned to this Node. Optionally search up the tree for the effective roles.
+     *
+     * @param node the subject Node
+     * @param effective if true then search for effective roles
+     * @return a set of roles for each principal
+     */
+    public Map&lt;String, Collection&lt;String&gt;&gt; getRoles(final Node node, final boolean effective);
+
+    /**
+     * Assigns the given set of roles to each principal.
+     *
+     * @param node the Node to edit
+     * @param data the roles to assign
+     * @throws RepositoryException if repository exception occurred
+     */
+    public void postRoles(final Node node, final Map&lt;String, Set&lt;String&gt;&gt; data)
+            throws RepositoryException;
+
+    /**
+     * Deletes all roles assigned on this node and removes the mixin type.
+     *
+     * @param node the node to delete
+     * @throws RepositoryException if delete failed
+     */
+    public void deleteRoles(final Node node) throws RepositoryException;
+
+    /**
+     * Finds effective roles assigned to a path, using first real ancestor node.
+     *
+     * @param absPath the real or potential node path
+     * @param session session
+     * @return the roles assigned to each principal
+     * @throws RepositoryException if PathNotFoundException can not handle
+     */
+    public Map&lt;String, Collection&lt;String&gt;&gt; findRolesForPath(final Path absPath,
+            final Session session) throws RepositoryException;
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
