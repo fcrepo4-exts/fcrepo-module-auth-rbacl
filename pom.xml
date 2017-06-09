@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.fcrepo</groupId>
     <artifactId>fcrepo</artifactId>
-    <version>4.7.3-SNAPSHOT</version>
+    <version>4.7.4-SNAPSHOT</version>
   </parent>
   <artifactId>fcrepo-module-auth-rbacl</artifactId>
   <packaging>pom</packaging>
@@ -30,11 +30,11 @@
   </repositories>
 
   <scm>
-    <connection>scm:git:git://github.com/fcrepo4/${project.artifactId}.git
+    <connection>scm:git:git://github.com/fcrepo4-exts/${project.artifactId}.git
     </connection>
-    <developerConnection>scm:git:git@github.com:fcrepo4/${project.artifactId}.git
+    <developerConnection>scm:git:git@github.com:fcrepo4-exts/${project.artifactId}.git
     </developerConnection>
-    <url>https://github.com/fcrepo4/fcrepo-module-auth-rbacl</url>
+    <url>https://github.com/fcrepo4-exts/fcrepo-module-auth-rbacl</url>
     <tag>HEAD</tag>
   </scm>
 
@@ -73,17 +73,17 @@
       <dependency>
         <groupId>org.fcrepo</groupId>
         <artifactId>fcrepo-kernel-modeshape</artifactId>
-        <version>4.7.3-SNAPSHOT</version>
+        <version>4.7.4-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.fcrepo</groupId>
         <artifactId>fcrepo-http-api</artifactId>
-        <version>4.7.3-SNAPSHOT</version>
+        <version>4.7.4-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.fcrepo</groupId>
         <artifactId>fcrepo-auth-common</artifactId>
-        <version>4.7.3-SNAPSHOT</version>
+        <version>4.7.4-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.fcrepo</groupId>
@@ -138,18 +138,18 @@
       <dependency>
         <groupId>org.fcrepo</groupId>
         <artifactId>fcrepo-http-commons</artifactId>
-        <version>4.7.3-SNAPSHOT</version>
+        <version>4.7.4-SNAPSHOT</version>
         <type>test-jar</type>
       </dependency>
       <dependency>
         <groupId>org.fcrepo</groupId>
         <artifactId>fcrepo-configs</artifactId>
-        <version>4.7.3-SNAPSHOT</version>
+        <version>4.7.4-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.fcrepo</groupId>
         <artifactId>fcrepo-kernel-modeshape</artifactId>
-        <version>4.7.3-SNAPSHOT</version>
+        <version>4.7.4-SNAPSHOT</version>
         <classifier>tests</classifier>
       </dependency>
       <dependency>
