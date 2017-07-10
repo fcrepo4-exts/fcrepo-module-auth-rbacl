@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Gregory Jansen
  */
+@Deprecated
 public class BasicRolesAuthorizationDelegate extends AbstractRolesAuthorizationDelegate {
 
     public static final String EVERYONE_NAME = "EVERYONE";
@@ -62,6 +63,11 @@ public class BasicRolesAuthorizationDelegate extends AbstractRolesAuthorizationD
     public boolean rolesHavePermission(final Session userSession,
             final String absPath,
             final String[] actions, final Set<String> roles) {
+        LOGGER.warn("===========================");
+        LOGGER.warn("This authorization provider is deprecated and will be removed in a future release of Fedora: {}",
+                this.getClass());
+        LOGGER.warn("===========================");
+
         if (roles.isEmpty()) {
             LOGGER.debug("A caller without content roles can do nothing in the repository.");
             return false;
