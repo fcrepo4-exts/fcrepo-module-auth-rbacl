@@ -1,7 +1,7 @@
 fcrepo-module-auth-rbacl
 ========================
 
-[![Build Status](https://travis-ci.org/fcrepo4-exts/fcrepo-module-auth-rbacl.png?branch=master)](https://travis-ci.org/fcrepo4-exts/fcrepo-module-auth-rbacl)
+[![Build Status](https://travis-ci.org/fcrepo-exts/fcrepo-module-auth-rbacl.png?branch=master)](https://travis-ci.org/fcrepo-exts/fcrepo-module-auth-rbacl)
 
 ### WARNING
 ---
