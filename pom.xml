@@ -30,11 +30,11 @@
   </repositories>
 
   <scm>
-    <connection>scm:git:git://github.com/fcrepo4-exts/${project.artifactId}.git
+    <connection>scm:git:git://github.com/fcrepo-exts/${project.artifactId}.git
     </connection>
-    <developerConnection>scm:git:git@github.com:fcrepo4-exts/${project.artifactId}.git
+    <developerConnection>scm:git:git@github.com:fcrepo-exts/${project.artifactId}.git
     </developerConnection>
-    <url>https://github.com/fcrepo4-exts/fcrepo-module-auth-rbacl</url>
+    <url>https://github.com/fcrepo-exts/fcrepo-module-auth-rbacl</url>
     <tag>HEAD</tag>
   </scm>
 
